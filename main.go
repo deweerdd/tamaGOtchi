@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	_ "image/png"
-	"log"
 	"strconv"
 
 	"github.com/ddeweerd/tamaGOtchi/components"
@@ -15,10 +15,16 @@ type Game struct {
 	count int
 }
 
-func drawFrame(img *ebiten.Image, sprite components.Sprite, frameX int, frameY int, canvasX int, canvasY int) {
+func drawFrame(screen *ebiten.Image, sprite components.Sprite, frameX int, frameY int, posX int, posY int) {
+	gd := newGameData()
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(canvasX), float64(canvasY))
-	img.DrawImage(sprite.Image.SubImage(image.Rect(frameX*sprite.FrameWidth, frameY*sprite.FrameHeight, sprite.FrameWidth, sprite.FrameHeight)).(*ebiten.Image), op)
+
+	op.GeoM.Translate(float64(posX*16), float64(gd.ScreenHeight)/2)
+	fmt.Println(gd.ScreenWidth, float64(gd.ScreenWidth)/2)
+
+	//Need to refactor for larger Sprites or Multirow Sprites.
+	spriteFromSheet := sprite.Image.SubImage(image.Rect(frameX*sprite.FrameWidth, frameY, frameX*sprite.FrameWidth+sprite.FrameWidth, sprite.FrameHeight))
+	screen.DrawImage(spriteFromSheet.(*ebiten.Image), op)
 }
 
 func (g *Game) Update() error {
@@ -27,30 +33,12 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	baby, _, err := ebitenutil.NewImageFromFile("assets/baby.png")
-	if err != nil {
-		log.Fatal(err)
-	}
-	sprite := components.Sprite{
-		FrameOX:     0,
-		FrameOY:     0,
-		FrameWidth:  16,
-		FrameHeight: 16,
-		FrameNum:    4,
-		Image:       baby,
-	}
-	//op := &ebiten.DrawImageOptions{}
-	//gd := newGameData()
-	//op.GeoM.Scale(2, 2)
-	//op.GeoM.Translate(float64((gd.ScreenWidth/2)-(sprite.FrameWidth/2)), float64(gd.ScreenHeight/2))
-	//println(float64((gd.ScreenWidth/2)-(sprite.FrameWidth/2)), float64(gd.ScreenHeight/2))
+	sprite := components.NewSprite("baby.png", 8)
 	i := g.count % sprite.FrameNum
-	sx, sy := sprite.FrameOX+i*sprite.FrameWidth, sprite.FrameOY
-	//println(i, sx, sy, sx+sprite.FrameWidth, sy+sprite.FrameHeight)
-	//screen.DrawImage(sprite.Image.SubImage(image.Rect(sx, sy, sx+sprite.FrameWidth, sy+sprite.FrameHeight)).(*ebiten.Image), op)
-	drawFrame(screen, sprite, sx, sy, 0, 0)
+	imageIndex := []int{1, 7, 1, 7, 1, 7, 1, 7}
 	debugCount := strconv.Itoa(i)
 	ebitenutil.DebugPrint(screen, debugCount)
+	drawFrame(screen, sprite, imageIndex[i], 0, 5, 0)
 }
 
 func (g *Game) Layout(w, h int) (int, int) {

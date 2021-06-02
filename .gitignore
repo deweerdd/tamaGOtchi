@@ -2,6 +2,9 @@
 #  Original  #
 ##############
 
+#VSCODE
+.vscode/*
+launch.json
 # directory structure
 bin/*
 pkg/*
