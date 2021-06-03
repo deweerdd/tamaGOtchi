@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image"
 	_ "image/png"
 	"strconv"
@@ -20,7 +19,7 @@ func drawFrame(screen *ebiten.Image, sprite components.Sprite, frameX int, frame
 	gd := newGameData()
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(float64(posX*16), float64(gd.ScreenHeight)/2)
-	fmt.Println(posX*16, float64(gd.ScreenWidth)/2)
+
 	//Need to refactor for larger Sprites or Multirow Sprites.
 	spriteFromSheet := sprite.Image.SubImage(image.Rect(frameX*sprite.FrameWidth, frameY, frameX*sprite.FrameWidth+sprite.FrameWidth, sprite.FrameHeight))
 	screen.DrawImage(spriteFromSheet.(*ebiten.Image), op)
@@ -36,8 +35,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	sprite := components.NewSprite("baby.png", 8)
 	i := g.count % sprite.FrameNum
 	imageIndex := []int{0, 1, 2, 7, 2, 1, 0, 1}
-	//positionIndex := []int{8, 10, 12, 14, 12, 10, 8, 10}
-	//position := RandIdle()
 	debugCount := strconv.Itoa(i)
 	ebitenutil.DebugPrint(screen, debugCount)
 	drawFrame(screen, sprite, imageIndex[i], 0, g.randIdle, 0)
