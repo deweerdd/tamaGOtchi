@@ -3,7 +3,7 @@
 ##############
 
 #VSCODE
-.vscode/*
+.vscode*
 launch.json
 # directory structure
 bin/*
