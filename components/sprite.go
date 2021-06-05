@@ -11,10 +11,11 @@ type Sprite struct {
 	FrameWidth  int
 	FrameHeight int
 	FrameNum    int
+	IdleLoop    []int
 	Image       *ebiten.Image
 }
 
-func NewSprite(asset string, frames int) Sprite {
+func NewSprite(asset string, frames int, frameWidth int, frameHeight int, idleLoop []int) Sprite {
 	path := "assets/" + asset
 	imgName, _, err := ebitenutil.NewImageFromFile(path)
 	if err != nil {
@@ -22,10 +23,11 @@ func NewSprite(asset string, frames int) Sprite {
 	}
 
 	sprite := Sprite{
-		FrameWidth:  16,
-		FrameHeight: 16,
+		FrameWidth:  frameWidth,
+		FrameHeight: frameHeight,
 		FrameNum:    frames,
 		Image:       imgName,
+		IdleLoop:    idleLoop,
 	}
 	return sprite
 }

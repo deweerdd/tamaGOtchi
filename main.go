@@ -1,7 +1,6 @@
 package main
 
 import (
-	"image"
 	_ "image/png"
 	"strconv"
 
@@ -15,16 +14,6 @@ type Game struct {
 	randIdle int
 }
 
-func drawFrame(screen *ebiten.Image, sprite components.Sprite, frameX int, frameY int, posX int, posY int) {
-	gd := newGameData()
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(posX*16), float64(gd.ScreenHeight)/2)
-
-	//Need to refactor for larger Sprites or Multirow Sprites.
-	spriteFromSheet := sprite.Image.SubImage(image.Rect(frameX*sprite.FrameWidth, frameY, frameX*sprite.FrameWidth+sprite.FrameWidth, sprite.FrameHeight))
-	screen.DrawImage(spriteFromSheet.(*ebiten.Image), op)
-}
-
 func (g *Game) Update() error {
 	g.count++
 	g.randIdle = RandIdle()
@@ -32,12 +21,16 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	sprite := components.NewSprite("baby.png", 8)
+	sprite := components.NewSprite("baby.png",
+		8,
+		16,
+		16,
+		[]int{0, 1, 2, 7, 2, 1, 0, 1})
 	i := g.count % sprite.FrameNum
-	imageIndex := []int{0, 1, 2, 7, 2, 1, 0, 1}
+
 	debugCount := strconv.Itoa(i)
 	ebitenutil.DebugPrint(screen, debugCount)
-	drawFrame(screen, sprite, imageIndex[i], 0, g.randIdle, 0)
+	drawFrame(screen, sprite, sprite.IdleLoop[i], 0, g.randIdle, 0)
 }
 
 func (g *Game) Layout(w, h int) (int, int) {
