@@ -1,5 +1,7 @@
 ### A Tamagotchi written in GO!
 
+A TamaGOtchi written in GO using Ebiten/v2 Game Engine. A fun way to learn Go, Entity Component Systems, 2d Development, and practice Test Driven Development.
+
 ## Entity
 
 Tamagotchi
