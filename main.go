@@ -21,16 +21,25 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	sprite := components.NewSprite("baby.png",
+
+	egg := components.NewSprite("egg.png",
+		2,
+		16,
+		16,
+		[]int{0, 1})
+	i := g.count % egg.FrameNum
+	drawFrame(screen, egg, egg.IdleLoop[i], 0, 9, 0)
+
+	baby := components.NewSprite("baby.png",
 		8,
 		16,
 		16,
 		[]int{0, 1, 2, 7, 2, 1, 0, 1})
-	i := g.count % sprite.FrameNum
+	ib := g.count % baby.FrameNum
+	drawFrame(screen, baby, baby.IdleLoop[ib], 0, g.randIdle, 0)
 
 	debugCount := strconv.Itoa(i)
 	ebitenutil.DebugPrint(screen, debugCount)
-	drawFrame(screen, sprite, sprite.IdleLoop[i], 0, g.randIdle, 0)
 }
 
 func (g *Game) Layout(w, h int) (int, int) {
