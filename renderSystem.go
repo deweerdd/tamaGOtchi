@@ -8,7 +8,6 @@ import (
 )
 
 func drawFrame(screen *ebiten.Image, sprite components.Sprite, frameX int, frameY int, posX int, posY int) {
-	gd := newGameData()
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(float64(posX*16), float64(gd.ScreenHeight)/2)
 

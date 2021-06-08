@@ -1,6 +1,6 @@
 package components
 
-type position struct {
+type Position struct {
 	index []int
 	PosX  int
 	PosY  int

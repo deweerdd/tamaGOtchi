@@ -3,6 +3,7 @@ package main
 import (
 	_ "image/png"
 	"strconv"
+	"time"
 
 	"github.com/ddeweerd/tamaGOtchi/components"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -10,13 +11,17 @@ import (
 )
 
 type Game struct {
-	count    int
-	randIdle int
+	count       int
+	randIdle    int
+	currentTime int
 }
+
+var gd = newGameData()
 
 func (g *Game) Update() error {
 	g.count++
 	g.randIdle = RandIdle()
+	g.currentTime = time.Now().Second()
 	return nil
 }
 
@@ -38,17 +43,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	ib := g.count % baby.FrameNum
 	drawFrame(screen, baby, baby.IdleLoop[ib], 0, g.randIdle, 0)
 
-	debugCount := strconv.Itoa(i)
-	ebitenutil.DebugPrint(screen, debugCount)
+	//ebitenutil.DebugPrint(screen, strconv.Itoa(i))
+	ebitenutil.DebugPrint(screen, strconv.Itoa(g.currentTime))
 }
 
 func (g *Game) Layout(w, h int) (int, int) {
-	gd := newGameData()
 	return gd.ScreenWidth, gd.ScreenHeight
 }
 
 func main() {
-	gd := newGameData()
 	ebiten.SetWindowResizable(true)
 	ebiten.SetWindowSize(gd.ScreenWidth*2, gd.ScreenHeight*2)
 	ebiten.SetMaxTPS(1)
