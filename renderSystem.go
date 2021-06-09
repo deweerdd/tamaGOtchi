@@ -15,3 +15,7 @@ func drawFrame(screen *ebiten.Image, sprite components.Sprite, frameX int, frame
 	spriteFromSheet := sprite.Image.SubImage(image.Rect(frameX*sprite.FrameWidth, frameY, frameX*sprite.FrameWidth+sprite.FrameWidth, sprite.FrameHeight))
 	screen.DrawImage(spriteFromSheet.(*ebiten.Image), op)
 }
+
+func Hatch() {
+
+}
